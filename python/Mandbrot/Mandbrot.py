@@ -19,8 +19,8 @@ def coord_map(point_real,imag_top_left,imag_lower_right):
 	imag_lower_right: (float,float) 虚数空间右下角
 	return:           complex       虚数
 	"""
-	c_real=imag_top_left[0]+(imag_lower_right[0]-imag_top_left[0])*(point_real[0]/width)
-	c_imag=imag_top_left[1]+(imag_lower_right[1]-imag_top_left[1])*(point_real[1]/height)
+	c_real=imag_top_left[0]+(imag_lower_right[0]-imag_top_left[0])*(point_real[1]/width)
+	c_imag=imag_top_left[1]+(imag_lower_right[1]-imag_top_left[1])*(point_real[0]/height)
 	return (c_real,c_imag)
 
 def point_iter_count(point_imag,iter_max_limit):
@@ -29,7 +29,7 @@ def point_iter_count(point_imag,iter_max_limit):
 	return:     int           >0  发散点的迭代次数
 				int			  ==0 收敛点
 	"""
-	c=complex(point_imag[1],point_imag[0])
+	c=complex(point_imag[0],point_imag[1])
 	z=complex(0,0)
 	for m in range(iter_max_limit):
 		z=z*z+c
@@ -83,6 +83,7 @@ def draw(imag_top_left,imag_lower_right,iter_max_limit=1000):
 	"""
 	_img=Image.new('RGB',(width,height))
 	img=np.array(_img)
+	st=set()
 	for px in range(height):
 		for py in range(width):
 			imag_point=coord_map((px,py),imag_top_left,imag_lower_right)
@@ -90,11 +91,16 @@ def draw(imag_top_left,imag_lower_right,iter_max_limit=1000):
 			if iter_count: # 发散
 				for i in range(3):
 					img[px,py,i]=color[iter_count%MAXCOLOR][i]
-				else:
-					img[px,py,:]=0
+			else:
+				img[px,py,:]=0
 	return img
 
 if __name__=='__main__':
-	img=draw((-2.1,1.2),(1.1,1.2),400)
+	init_color()
+
+	# left=coord_map((0,0), (-2.1,-1.2), (1.1,1.2))
+	# right=coord_map((400,400), (-2.1,-1.2), (1.1,1.2))
+	img=draw((-2.1,-1.2),(1.1,1.2),2000)
+	# img=draw(left,right,400)
 	plt.imshow(img)
 	plt.show()
