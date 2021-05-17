@@ -2,18 +2,24 @@ import time
 from PIL import Image
 import numpy as np
 import matplotlib.pyplot as plt
+from mpmath import *
 import colorsys
 import math
-# 绘制图片的高
+# 绘制图片尺寸
 height=480
-# 绘制图片的宽
 width=640
 # 配色方案
 MAXCOLOR=64
 color=[(0,0,0) for i in range(MAXCOLOR)]
+color_inited=False
+# 默认迭代最大次数
+DEFAULT_ITER_MAX=200
+# 默认虚数空间
+DEFAULT_IMAG_TL=(mpf(-2.1),mpf(-1.2))  # top left
+DEFAULT_IMAG_BR=(mpf(1.1),mpf(1.2))    # bottom right
 
 def coord_map(point_real,imag_top_left,imag_lower_right):
-	"""坐标映射，实数空间->虚数空间
+	"""坐标映射，屏幕空间->虚数空间,注意屏幕空间坐标系xy和虚数空间相反
 	point_real:       (float,float) 实数空间坐标
 	imag_top_left:    (float,float) 虚数空间左上角
 	imag_lower_right: (float,float) 虚数空间右下角
@@ -75,8 +81,8 @@ def init_color():
 	for i in range(MAXCOLOR//2):
 		color[i]=hls_to_rgb(float(h1),1.0,i*2.0/MAXCOLOR)
 		color[MAXCOLOR-1-i]=hls_to_rgb(float(h2),1.0,i*2.0/MAXCOLOR)
-def draw(imag_top_left,imag_lower_right,iter_max_limit=1000):
-	"""绘制
+def _draw(imag_top_left,imag_lower_right,iter_max_limit):
+	"""将指定区域的虚数空间投射到(width,height)大小的区域
 	imag_top_left:    虚数空间左上角坐标
 	imag_lower_right: 虚数空间右下角坐标
 	return:           np.array 图片数据
@@ -94,13 +100,23 @@ def draw(imag_top_left,imag_lower_right,iter_max_limit=1000):
 			else:
 				img[px,py,:]=0
 	return img
+def draw(point_real,zoom,max_iter=DEFAULT_ITER_MAX):
+	global color_inited
+	if color_inited == False:
+		init_color()
+		color_inited=True
+	x,y=point_real
+	pl=(x-0.5*((1/mpf(zoom))**0.5)*height,y-0.5*((1/mpf(zoom))**0.5)*width)
+	pr=(x+0.5*((1/mpf(zoom))**0.5)*height,y+0.5*((1/mpf(zoom))**0.5)*width)
+	imag_pl=coord_map(pl,DEFAULT_IMAG_TL,DEFAULT_IMAG_BR)
+	imag_pr=coord_map(pr,DEFAULT_IMAG_TL,DEFAULT_IMAG_BR)
+	return _draw(imag_pl,imag_pr,max_iter)
 
 if __name__=='__main__':
 	init_color()
-
-	# left=coord_map((0,0), (-2.1,-1.2), (1.1,1.2))
-	# right=coord_map((400,400), (-2.1,-1.2), (1.1,1.2))
-	img=draw((-2.1,-1.2),(1.1,1.2),2000)
-	# img=draw(left,right,400)
+	# img=_draw(DEFAULT_IMAG_TL,DEFAULT_IMAG_BR,DEFAULT_ITER_MAX)
+	img=draw((121,340),10)
+	im=Image.fromarray(img)
+	im.save('1.jpg')
 	plt.imshow(img)
 	plt.show()
