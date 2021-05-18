@@ -9,7 +9,7 @@ import math
 height=480
 width=640
 # 配色方案
-MAXCOLOR=64
+MAXCOLOR=80
 color=[(0,0,0) for i in range(MAXCOLOR)]
 color_inited=False
 # 默认迭代最大次数
@@ -17,6 +17,9 @@ DEFAULT_ITER_MAX=200
 # 默认虚数空间
 DEFAULT_IMAG_TL=(mpf(-2.1),mpf(-1.2))  # top left
 DEFAULT_IMAG_BR=(mpf(1.1),mpf(1.2))    # bottom right
+
+mp.dps=20
+
 
 def coord_map(point_real,imag_top_left,imag_lower_right):
 	"""坐标映射，屏幕空间->虚数空间,注意屏幕空间坐标系xy和虚数空间相反
@@ -35,8 +38,8 @@ def point_iter_count(point_imag,iter_max_limit):
 	return:     int           >0  发散点的迭代次数
 				int			  ==0 收敛点
 	"""
-	c=complex(point_imag[0],point_imag[1])
-	z=complex(0,0)
+	c=mpc(point_imag[0],point_imag[1])
+	z=mpc(0,0)
 	for m in range(iter_max_limit):
 		z=z*z+c
 		if z.real*z.real + z.imag*z.imag>4:
@@ -100,7 +103,7 @@ def _draw(imag_top_left,imag_lower_right,iter_max_limit):
 			else:
 				img[px,py,:]=0
 	return img
-def draw(point_real,zoom,max_iter=DEFAULT_ITER_MAX):
+def draw(point_real,zoom):
 	global color_inited
 	if color_inited == False:
 		init_color()
@@ -110,13 +113,11 @@ def draw(point_real,zoom,max_iter=DEFAULT_ITER_MAX):
 	pr=(x+0.5*((1/mpf(zoom))**0.5)*height,y+0.5*((1/mpf(zoom))**0.5)*width)
 	imag_pl=coord_map(pl,DEFAULT_IMAG_TL,DEFAULT_IMAG_BR)
 	imag_pr=coord_map(pr,DEFAULT_IMAG_TL,DEFAULT_IMAG_BR)
-	return _draw(imag_pl,imag_pr,max_iter)
+	return _draw(imag_pl,imag_pr,DEFAULT_ITER_MAX)
 
 if __name__=='__main__':
 	init_color()
 	# img=_draw(DEFAULT_IMAG_TL,DEFAULT_IMAG_BR,DEFAULT_ITER_MAX)
-	img=draw((121,340),10)
-	im=Image.fromarray(img)
-	im.save('1.jpg')
+	img=draw((55.0102498495021,400.1199980420148),1000000000000000000000000000000)
 	plt.imshow(img)
 	plt.show()
