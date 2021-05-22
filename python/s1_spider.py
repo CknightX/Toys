@@ -42,26 +42,27 @@ async def parse_posts(url,page_no):
             text=await fetch_async(url)
             posts=_parse_posts(text)
         except Exception as e:
-            await asyncio.sleep(10)
+            await asyncio.sleep(5)
             continue
         else:
             break
     if not text or not posts:
         print(f'page {page_no} error,retry...')
-        await asyncio.sleep(5)
+        await asyncio.sleep(2)
         return await parse_posts(url,page_no)
     else:
         return posts
 
 
-
-
-async def work(id):
+async def work(id,max_pages=-1):
     pages=await parse_num_pages(id)
+    if max_pages!=-1:
+        pages=min(pages,max_pages)
     print(f'页数：{pages}')
     tasks=[]
     for index in range(1,pages+1):
         url=gen_url(id,index)
+        print(url)
         tasks.append(parse_posts(url,index))
     posts=await asyncio.gather(*tasks)
     floor=1
@@ -78,8 +79,10 @@ async def work(id):
     
 
 def main():
+    print('id:',end='')
+    id=input()
     loop=asyncio.get_event_loop()
-    loop.run_until_complete(work('1994076'))
+    loop.run_until_complete(work(id))
 
 if __name__=='__main__':
     main()
