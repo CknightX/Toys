@@ -4,11 +4,11 @@ import time
 import os
 
 # 放大点
-p = (121,345)
+p = (169,212)
 # 张数
-count=1000
+count=10
 # 倍数步长
-zoom_step=1.1
+zoom_step=5
 
 def main():
     if os.path.exists('tasks.db'):

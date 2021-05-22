@@ -115,8 +115,6 @@ def draw(point_real,zoom,max_iter=DEFAULT_ITER_MAX):
 if __name__=='__main__':
 	init_color()
 	# img=_draw(DEFAULT_IMAG_TL,DEFAULT_IMAG_BR,DEFAULT_ITER_MAX)
-	img=draw((121,340),10)
-	im=Image.fromarray(img)
-	im.save('1.jpg')
+	img=draw((55.01024984955,400.119998042),10000000000000000000000000,200)
 	plt.imshow(img)
 	plt.show()
