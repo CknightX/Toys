@@ -62,7 +62,6 @@ async def work(id,max_pages=-1):
     tasks=[]
     for index in range(1,pages+1):
         url=gen_url(id,index)
-        print(url)
         tasks.append(parse_posts(url,index))
     posts=await asyncio.gather(*tasks)
     floor=1
