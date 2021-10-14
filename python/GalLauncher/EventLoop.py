@@ -53,6 +53,7 @@ def eventloop():
                 continue
 
             Utils.run_game(path,window)
+            window.Minimize() # 窗口最小化
             window['-GAME-STATUS-'].update('运行中')
             Global.running_game = game_name
 
@@ -128,6 +129,7 @@ def eventloop():
             modify_game_window = None
 
             MainWindow.update_game_list(main_window)
+
 
         # 修改游戏窗体-删除按钮-点击
         if window == modify_game_window and event =='-DEL-':

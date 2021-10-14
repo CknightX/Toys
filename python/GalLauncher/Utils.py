@@ -5,7 +5,7 @@ import TimeUtils as tu
 
 
 def run_game(path,window):
-    """创建线程，执行游戏程序,游戏结束后产生事件，value为(开始时间，结束时间)"""
+    """创建线程，执行游戏程序,游戏结束后产生事件，value为(开始时间，结束时间)，从而监控进程的结束"""
     # 用于隐藏黑框
     st=subprocess.STARTUPINFO()
     # 隐藏窗体

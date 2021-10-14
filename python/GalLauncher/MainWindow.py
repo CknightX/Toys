@@ -8,7 +8,9 @@ def make_main_window():
     list_box = sg.Listbox([],size = (None,15),auto_size_text=True,key = '-GAME-LIST-',enable_events = True)
     left_col = [
         [list_box],
-        [sg.Button('增加游戏',key = '-GAME-ADD-'),sg.Button('修改游戏',key = '-GAME-MOD-')]
+        [sg.Button('增加游戏',key = '-GAME-ADD-'),
+        sg.Button('修改游戏',key = '-GAME-MOD-'),
+        ]
     ]
     right_col = [
         [sg.Text('启动次数:'),sg.Text('',key = '-LAUNCH-CNT-')],

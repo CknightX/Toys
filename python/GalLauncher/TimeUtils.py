@@ -22,12 +22,12 @@ def timestamp_format(timestamp):
     dt = time.strftime("%Y-%m-%d %H:%M:%S", timelocal)
     return dt
 
-def interval_format(timedelta):
+def interval_format(timedelta : datetime.timedelta):
     """
     使时间差可读
     :return (hour,minute,second)
     """
-    seconds = timedelta.seconds
+    seconds = int(timedelta.total_seconds())
     minutes = seconds // 60
     seconds -= minutes * 60
     hours = minutes // 60
