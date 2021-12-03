@@ -1,5 +1,4 @@
 import logging
-from PyQt5 import QtWidgets
 from PyQt5.QtMultimediaWidgets import QVideoWidget
 from PyQt5.QtCore import QUrl, pyqtSignal
 from PyQt5.QtWidgets import  QApplication
@@ -33,11 +32,13 @@ class ListenThread(QThread):
     def run(self):
         self.running = True
         while self.running is True:
-            text = Recognizer.listen_once(mode,self.window)
+            text = Recognizer.listen_once(mode,self)
+            if not self.running:
+                break
             logging.info(f'识别到字符串:{text}')
             self._sig.emit(text)
             self.sleep(1)
-        logging.info('录音终止')
+        logging.info(f'录音线程终止，id={int(self.currentThreadId())}')
     def stop(self):
         self.running = False
 
@@ -57,7 +58,8 @@ class MainWindow(QMainWindow,MainWindowUI.Ui_MainWindow):
 
     def play_video(self,msg : str):
         # TODO 播放视频
-        no = say2no(msg)
+        no = Utils.setence2no(msg)
+        logging.info(f'识别到序号：{no}')
         path = os.path.join('video',f'{no}.mp4')
         if not os.path.exists(path) or self.listening is False:
             return
@@ -71,7 +73,7 @@ class MainWindow(QMainWindow,MainWindowUI.Ui_MainWindow):
         self.player.play()
 
     def click_menu_start(self):
-        if self.listening:
+        if self.listening or self.listen_thread is not None:
             return
         self.setWindowTitle(f'{self.title}-监听中')
         self.listening = True
@@ -85,4 +87,5 @@ class MainWindow(QMainWindow,MainWindowUI.Ui_MainWindow):
         self.setWindowTitle(f'{self.title}-已停止')
         self.listening = False
         self.listen_thread._stop_sig.emit()
+        self.listen_thread = None
     
