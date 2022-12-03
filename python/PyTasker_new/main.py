@@ -1,0 +1,3 @@
+from PyTasker import *
+
+loop()
