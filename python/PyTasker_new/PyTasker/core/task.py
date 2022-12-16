@@ -1,8 +1,10 @@
 import time,schedule,threading
-from .task_proc import TaskProc
+from .executor import TaskExecutor
+from .proc import TaskProc
+from .manager import TaskManager
+from .utils import safe_run
 
-
-class Task:
+class TaskCreator:
     def __init__(self,name) -> None:
         self.name = name
     
@@ -11,23 +13,15 @@ class Task:
     
     def run_with(self,subname,job : schedule.Job):
         def wrapper(func):
-            if TaskProc.get_tasks(self.name,subname):
-                return func
-            TaskProc.add_task(self.name,subname,job)
+            TaskManager.add_task(self.name,subname)
             job.do(run_with_new_thread,self.name,subname,func)
             return func
         return wrapper
-
+    
 def run_with_new_thread(name,subname,job_func):
     if TaskProc.is_paused(name,subname):
         return
     
-    def wrapper():
-        try:
-            job_func()
-        except:
-            pass
-    
-    TaskProc.tpool.submit(wrapper)
+    TaskExecutor.run(safe_run(job_func))
 
 

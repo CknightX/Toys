@@ -1,5 +1,6 @@
-from . import task_proc
-import time
+from .proc import TaskProc
+from .task import TaskCreator
+
 def loop():
-    task_proc.TaskProc.loop()
+    TaskProc.loop()
 

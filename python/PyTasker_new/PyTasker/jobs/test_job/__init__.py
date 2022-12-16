@@ -1,5 +1,5 @@
-from ...core.task import Task
-from ...core.task_proc import TaskProc
+from ...core.task_creator import Task
+from ...core.proc import TaskProc
 job_name = 'test_job'
 
 task = Task(job_name)
