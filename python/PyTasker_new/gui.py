@@ -2,7 +2,7 @@ import sys
 
 from PySide6.QtWidgets import QApplication, QWidget
 from PySide6.QtCore import QThread
-from ui import Ui_Form
+from PyTasker.ui.ui import Ui_Form
 from PyTasker import core
 
 class TaskLoopThread(QThread):
@@ -15,7 +15,6 @@ class TaskLoopThread(QThread):
 class MyWidget(QWidget):
     def __init__(self):
         super().__init__()
-        # 设置界面为我们生成的界面
         self.ui = Ui_Form()
         self.ui.setupUi(self)
         self.task_loop_thread = TaskLoopThread()
@@ -26,6 +25,7 @@ class MyWidget(QWidget):
     
     def closeEvent(self, event) -> None:
         core.task_proc.TaskProc.loop_stoped = True
+        self.task_loop_thread.quit()
         return super().closeEvent(event)
     
     def pause_task(self):
@@ -42,6 +42,13 @@ class MyWidget(QWidget):
         self.ui.pause.clicked.connect(self.pause_task)
         self.ui.restart.clicked.connect(self.restart_task)
     
+    def init_listWidget(self):
+        tasks = core.task_proc.TaskProc.get_tasks()
+        for task in tasks:
+            self.ui.listWidget.addItem(f'{task[0]}@{task[1]}')
+        
+        self.ui.listWidget.itemClicked.connect(self.refresh_list_item_status)
+
     def refresh_list_item_status(self):
         name,subname = self.ui.listWidget.currentItem().text().split('@')
         if core.task_proc.TaskProc.is_paused(name,subname):
@@ -53,12 +60,6 @@ class MyWidget(QWidget):
 
 
     
-    def init_listWidget(self):
-        tasks = core.task_proc.TaskProc.get_tasks()
-        for task in tasks:
-            self.ui.listWidget.addItem(f'{task[0]}@{task[1]}')
-        
-        self.ui.listWidget.itemClicked.connect(self.refresh_list_item_status)
 
 
 

@@ -32,6 +32,7 @@ class TaskProc:
         while not cls.loop_stoped:
             cls.sche.run_pending()
             time.sleep(1)
+        cls.tpool.shutdown()
 
     @classmethod
     def cancel_task(cls, name, subname):
