@@ -13,7 +13,7 @@ class TaskLoopThread(QThread):
     def run(self):
         core.loop()
 
-class MyWidget(QWidget):
+class PyTaskerMainWindow(QWidget):
     def __init__(self):
         super().__init__()
         self.ui = Ui_Form()
@@ -67,7 +67,7 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
  
     # 初始化并展示我们的界面组件
-    window = MyWidget()
+    window = PyTaskerMainWindow()
     window.show()
     
     sys.exit(app.exec())

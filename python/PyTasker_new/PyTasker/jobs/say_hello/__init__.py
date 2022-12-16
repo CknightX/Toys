@@ -1,5 +1,4 @@
-from ...core import TaskCreator
-from ...core import TaskProc
+from ...core import *
 import time
 job_name = 'say'
 
