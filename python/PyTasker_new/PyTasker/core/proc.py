@@ -7,7 +7,7 @@ from .executor import *
 from .logger import *
 
 POOL_SIZE = 100
-TICK = 1
+LOOP_TICK = 1
 
 class TaskProc:
     sche = schedule.Scheduler()
@@ -16,6 +16,7 @@ class TaskProc:
     @classmethod
     def init(cls):
         stdout2logfile()
+        pass
 
     @classmethod
     def get_tasks(cls, name='*', subname='*'):
@@ -30,14 +31,15 @@ class TaskProc:
         cls.init()
         while not cls.loop_stoped:
             cls.sche.run_pending()
-            time.sleep(TICK)
+            flush_log()
+            time.sleep(LOOP_TICK)
 
         TaskExecutor.stop()
     
     @classmethod
     def stop_loop(cls):
-        cls.loop_stoped = True
         reset_stdout()
+        cls.loop_stoped = True
 
 
     @classmethod

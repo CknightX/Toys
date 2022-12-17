@@ -3,7 +3,7 @@ auto load all modules
 """
 import os
 ignore = [
-    'test_job'
+    'say_hello'
 ]
 
 base_path = os.path.dirname(__file__)

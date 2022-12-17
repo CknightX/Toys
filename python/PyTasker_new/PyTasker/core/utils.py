@@ -1,4 +1,4 @@
-import threading
+import threading,traceback
 from .logger import stdout
 
 
@@ -13,9 +13,7 @@ def safe_run(fc):
     def wrapper():
         try:
             fc()
-        except:
+        except Exception as e:
+            traceback.print_exc()
             pass
     return wrapper
-
-def stdprint(str,end='\n'):
-    print(str,file=stdout,end=end,flush=True)

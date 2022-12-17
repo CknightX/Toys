@@ -1,9 +1,10 @@
-from ...core.task_creator import Task
-from ...core.proc import TaskProc
-job_name = 'test_job'
+from ...core import *
+import time
+job_name = 'loveyou'
 
-task = Task(job_name)
+task = TaskCreator(job_name)
 
-@task.run_with("test1",task.every(1).second)
+@task.run_with("1",TimeTrigger().every(2).seconds)
 def runner():
-    print(TaskProc.get_tasks())
+    print('i love you')
+    raise Exception("error")

@@ -1,5 +1,5 @@
 from PyTasker.core import *
-from PyTasker.core.utils import stdprint
+from PyTasker.core.logger import stdprint
 from threading import Thread
 import os
 
