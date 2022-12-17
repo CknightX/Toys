@@ -1,4 +1,7 @@
 import threading
+from .logger import stdout
+
+
 
 def gen_task_fullname(name,subname):
     return f'{name}@{subname}'
@@ -13,3 +16,6 @@ def safe_run(fc):
         except:
             pass
     return wrapper
+
+def stdprint(str,end='\n'):
+    print(str,file=stdout,end=end,flush=True)

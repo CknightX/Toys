@@ -4,6 +4,7 @@ from concurrent.futures import ThreadPoolExecutor
 from .utils import *
 from .manager import *
 from .executor import *
+from .logger import *
 
 POOL_SIZE = 100
 TICK = 1
@@ -11,6 +12,10 @@ TICK = 1
 class TaskProc:
     sche = schedule.Scheduler()
     loop_stoped = False
+
+    @classmethod
+    def init(cls):
+        stdout2logfile()
 
     @classmethod
     def get_tasks(cls, name='*', subname='*'):
@@ -22,6 +27,7 @@ class TaskProc:
     
     @classmethod
     def loop(cls):
+        cls.init()
         while not cls.loop_stoped:
             cls.sche.run_pending()
             time.sleep(TICK)
@@ -31,6 +37,8 @@ class TaskProc:
     @classmethod
     def stop_loop(cls):
         cls.loop_stoped = True
+        reset_stdout()
+
 
     @classmethod
     def add_task(cls, name, subname):
