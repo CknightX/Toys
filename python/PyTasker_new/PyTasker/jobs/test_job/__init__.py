@@ -7,4 +7,8 @@ task = TaskCreator(job_name)
 @task.run_with("1",TimeTrigger().every(2).seconds)
 def runner():
     print('i love you')
-    raise Exception("error")
+
+
+@task.run_with("2",FileTrigger().file_exist('./1.txt'))
+def runner():
+    print('have 1 txt')

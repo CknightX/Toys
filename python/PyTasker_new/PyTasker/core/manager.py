@@ -8,7 +8,7 @@ class TaskStatus(Enum):
     stoped = 3
 
 class TaskInfo:
-    def __init__(cls,name,subname,status) -> None:
+    def __init__(cls,name,subname,status,job) -> None:
         cls.name = name
         cls.subname = subname
         cls.status = status
@@ -20,13 +20,13 @@ class TaskInfo:
 class TaskManager:
     tasks = {}
     @classmethod
-    def add_task(cls,name,subname):
+    def add_task(cls,name,subname,job):
         if name == '*' or subname == '*':
             raise Exception('do not use "*" when add task')
         sub_tasks = cls.tasks.setdefault(name,{})
         if subname in sub_tasks:
             raise Exception('same task name')
-        sub_tasks[subname] = TaskInfo(name,subname,TaskStatus.running)
+        sub_tasks[subname] = TaskInfo(name,subname,TaskStatus.running,job)
     
     @classmethod
     def del_task(cls,name,subname):

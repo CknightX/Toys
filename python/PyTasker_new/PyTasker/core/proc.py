@@ -43,8 +43,8 @@ class TaskProc:
 
 
     @classmethod
-    def add_task(cls, name, subname):
-        TaskManager.add_task(name,subname)
+    def add_task(cls, name, subname,job):
+        TaskManager.add_task(name,subname,job)
 
     @classmethod
     def pause_task(cls, name, subname):

@@ -10,7 +10,7 @@ def run_with_new_thread(name,subname,job_func,trigger = None):
     if TaskProc.is_paused(name,subname):
         return
 
-    if trigger is not None and not trigger._check():
+    if trigger is not None and trigger._check() == False:
         return
     
     print(f'{datetime.datetime.now()} -- {gen_task_fullname(name,subname)}')
@@ -21,21 +21,15 @@ class TaskCreator:
     def __init__(self,name) -> None:
         self.name = name
     
-    def run_with(self,subname,job : schedule.Job):
-        TaskManager.add_task(self.name,subname)
-        def wrapper(func):
-            job.do(run_with_new_thread,self.name,subname,func)
-            return func
-        return wrapper
-    
     def run_with(self,subname,trigger):
-        TaskManager.add_task(self.name,subname)
         def wrapper(func):
             if type(trigger) == schedule.Job:
                 trigger.do(run_with_new_thread,self.name,subname,func)
+                TaskManager.add_task(self.name,subname,trigger)
             else:
-                job = schedule.Job(Trigger.tick,TaskProc.sche)
+                job = schedule.Job(Trigger.tick,TaskProc.sche).seconds
                 job.do(run_with_new_thread,self.name,subname,func,trigger)
+                TaskManager.add_task(self.name,subname,job)
             return func
 
         return wrapper

@@ -36,8 +36,9 @@ class FileTrigger(Trigger):
     def file_exist(self,file_path):
         self.mode = 'file_exist'
         self.file_path = file_path
+        return self
 
-    def _check(self):
+    def _check(self) -> bool:
         if self.mode == 'file_exist':
             if os.path.exists(self.file_path):
                 return True
