@@ -10,7 +10,7 @@ class TaskLoopThread(QThread):
         super().__init__()
     
     def run(self):
-        PyTasker.loop()
+        PyTasker.start_loop()
 
 class PyTaskerMainWindow(QWidget):
     def __init__(self):
@@ -22,6 +22,7 @@ class PyTaskerMainWindow(QWidget):
 
         self.init_buttion()
         self.init_listWidget()
+        
     
     def closeEvent(self, event) -> None:
         PyTasker.stop_loop()

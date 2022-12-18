@@ -9,10 +9,11 @@ class TriggerType(Enum):
     Base = 0
     Time = 1
     File = 2
+    Process = 3
     
 
 class Trigger:
-    tick = TRIGGER_TICK
+    tick = TRIGGER_TICK # trigger check tick, except time trigger
     def __init__(self) -> None:
         self.type = TriggerType.Base
         self.context = {}
@@ -42,6 +43,7 @@ class FileTrigger(Trigger):
     
     def new_file_with_list(self,fold_path):
         """triggered when new file in fold_path"""
+        self.mode = 'new_file_with_list'
         pass
 
     def _check(self) -> bool:
@@ -50,3 +52,8 @@ class FileTrigger(Trigger):
                 self.context['file'] = self.file_path
                 return True
         return False
+
+class ProcessTrigger(Trigger):
+    def __init__(self) -> None:
+        super().__init__()
+        self.type = TriggerType.Process
