@@ -15,21 +15,30 @@ def run_with_new_thread(name,subname,job_func,trigger = None):
     
     print(f'{datetime.datetime.now()} -- {gen_task_fullname(name,subname)}')
     
-    TaskExecutor.run(safe_run(job_func))
+    def func_with_context_wrapper():
+        if trigger is not None:
+            return job_func(trigger.context)
+        return job_func({})
+
+    TaskExecutor.run(safe_run(func_with_context_wrapper))
 
 class TaskCreator:
-    def __init__(self,name) -> None:
+    def __init__(self,name,is_hide = False) -> None:
+        self.is_hide = is_hide
         self.name = name
     
     def run_with(self,subname,trigger):
+        assert trigger is not None
         def wrapper(func):
             if type(trigger) == schedule.Job:
                 trigger.do(run_with_new_thread,self.name,subname,func)
-                TaskManager.add_task(self.name,subname,trigger)
+                if not self.is_hide:
+                    TaskManager.add_task(self.name,subname,trigger)
             else:
                 job = schedule.Job(Trigger.tick,TaskProc.sche).seconds
                 job.do(run_with_new_thread,self.name,subname,func,trigger)
-                TaskManager.add_task(self.name,subname,job)
+                if not self.is_hide:
+                    TaskManager.add_task(self.name,subname,job)
             return func
 
         return wrapper

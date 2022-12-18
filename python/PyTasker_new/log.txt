@@ -1,0 +1,33 @@
+2022-12-18 10:45:39.222709 -- loveyou@1
+i love you
+2022-12-18 10:45:40.229504 -- loveyou@2
+have ./1.txt txt
+2022-12-18 10:45:41.241146 -- loveyou@1
+i love you
+2022-12-18 10:45:43.268573 -- loveyou@2
+2022-12-18 10:45:43.268573 -- loveyou@1
+have ./1.txt txt
+i love you
+2022-12-18 10:45:45.291502 -- loveyou@1
+i love you
+2022-12-18 10:45:46.298804 -- loveyou@2
+have ./1.txt txt
+2022-12-18 10:45:47.314626 -- common@flush_log
+2022-12-18 10:45:47.314626 -- loveyou@1
+i love you
+2022-12-18 10:45:49.338543 -- loveyou@2
+2022-12-18 10:45:49.338543 -- loveyou@1
+have ./1.txt txt
+i love you
+2022-12-18 10:45:51.360448 -- loveyou@1
+i love you
+2022-12-18 10:45:52.367472 -- loveyou@2
+have ./1.txt txt
+2022-12-18 10:45:53.378434 -- loveyou@1
+i love you
+2022-12-18 10:45:55.399478 -- loveyou@2
+2022-12-18 10:45:55.399478 -- loveyou@1
+have ./1.txt txt
+i love you
+2022-12-18 10:45:57.420542 -- common@flush_log
+2022-12-18 10:45:57.420542 -- loveyou@1

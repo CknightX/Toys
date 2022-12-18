@@ -15,6 +15,7 @@ class Trigger:
     tick = TRIGGER_TICK
     def __init__(self) -> None:
         self.type = TriggerType.Base
+        self.context = {}
 
     def _check(self) -> bool:
         return True
@@ -34,12 +35,18 @@ class FileTrigger(Trigger):
         self.type = TriggerType.File
     
     def file_exist(self,file_path):
+        """triggered when file/fold exist"""
         self.mode = 'file_exist'
         self.file_path = file_path
         return self
+    
+    def new_file_with_list(self,fold_path):
+        """triggered when new file in fold_path"""
+        pass
 
     def _check(self) -> bool:
         if self.mode == 'file_exist':
             if os.path.exists(self.file_path):
+                self.context['file'] = self.file_path
                 return True
         return False

@@ -3,7 +3,7 @@ from PyTasker.core.logger import stdprint
 from threading import Thread
 import os
 
-loop_thread = Thread(target=loop,name="event_loop")
+loop_thread = Thread(target=start_loop,name="event_loop")
 loop_thread.start()
 while True:
     stdprint("""

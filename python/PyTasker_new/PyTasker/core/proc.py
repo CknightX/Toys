@@ -16,7 +16,10 @@ class TaskProc:
     @classmethod
     def init(cls):
         stdout2logfile()
-        pass
+    
+    @classmethod
+    def before_stop(cls):
+        reset_stdout()
 
     @classmethod
     def get_tasks(cls, name='*', subname='*'):
@@ -31,15 +34,14 @@ class TaskProc:
         cls.init()
         while not cls.loop_stoped:
             cls.sche.run_pending()
-            flush_log()
             time.sleep(LOOP_TICK)
 
         TaskExecutor.stop()
     
     @classmethod
     def stop_loop(cls):
-        reset_stdout()
         cls.loop_stoped = True
+        cls.before_stop()
 
 
     @classmethod
